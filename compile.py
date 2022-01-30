@@ -15,5 +15,7 @@ def compile(src_file, out_file):
 
 if __name__ == "__main__":
     compile(sys.argv[1], "out.c")
+
+    # compile and run outputted c
     os.system("gcc out.c -o out")
     os.system("out.exe")
