@@ -1,2 +1,2 @@
 language = "bash"
-run = "python compile.py in.weave"
+run = "python compile.py in.weave out.c"
