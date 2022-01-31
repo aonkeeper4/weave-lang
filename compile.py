@@ -1,6 +1,8 @@
 import lexer, parser, contextify, generate
 import sys, os
 
+# do i put type hints on everything ;o.o
+
 def compile_weave(src_file, out_file):
     if not out_file.endswith(".c"):
         raise ValueError("output must be C source file")
