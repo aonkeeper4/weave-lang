@@ -8,10 +8,10 @@ def compile(src_file, out_file):
     tokens = lexer.lexer(src)
     ast = parser.parser(tokens)
     action_tree = contextify.contextify(ast)
-    urcl_src = generate.generate(action_tree)
+    c_src = generate.generate(action_tree)
 
     with open(out_file, "w") as f:
-        f.write(urcl_src)
+        f.write(c_src)
 
 if __name__ == "__main__":
     compile(sys.argv[1], "out.c")
