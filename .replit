@@ -1,2 +1,5 @@
+#henlo
+#i made tokeniser.py
+## aa thankbs you
 language = "bash"
-run = "python compile.py in.weave out.c"
+run = "python tokeniser.py in.weave out.c"
