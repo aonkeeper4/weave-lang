@@ -25,13 +25,13 @@ def lexer(src):
     keyword = r"|".join(kws) # combined regex for keywords
 
     tokens_spec = [ # spent almost an hour debugging something before realising the order of these mattered
-        ("STR", r"(\".*\")|('.*')"), # string (any sequence of characters enclosed in quotes)
         ("OP", operator),
         ("KW", keyword),
         ("NUM", r"\d+\.?\d*"), # number: int/float
+        ("STR", r"(\".*\")|('.*')"), # string (any sequence of characters enclosed in quotes)
         ("ID", r"\b[a-zA-Z_]+\d*[a-zA-Z_]*"), # ids
-        ("NEWL", r"\n"), # for line counting / statement termination
         ("SPACE", r"\s"),
+        ("NEWL", r"\n"), # for line counting / statement termination
         ("BAD", r".")
     ]
     
