@@ -53,7 +53,7 @@ def lexer(src):
                 continue
             case "NEWL":
                 line += 1
-                continue
+                t_value = "" # we dont need that
             case "BAD":
                 raise RuntimeError(f"bad character {t_value} at line {line}") # implement column tracking?
 

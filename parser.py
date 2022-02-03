@@ -4,6 +4,7 @@ class SyntaxNode:
         self.val = val
         self.subnodes = subnodes
 
-def parser():
+# wow time for pain
+def parser(tokens):
     pass
     return ast
