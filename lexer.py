@@ -1,3 +1,4 @@
+from ast import operator
 import string
 import re
 
@@ -14,25 +15,19 @@ def lexer(src):
 
     tokens = []
 
-    # regexes for language components
-    word_ops = ["and", "or", "not", "xor", "in"] # operators that are words are handled differently
-    ops = ["<-", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", ","] # other operators
-
-    word_ops = [rf"\b{op}\b" for op in word_ops] # processing for word operators
-    operator = r"|".join(word_ops + ops) # combined regex for operators
-
     kws = ["if", "for", "do", "end", "return", "int", "float", "str", "bool", "function", "of", "arr", "none"]
-    keyword = r"|".join(kws) # combined regex for keywords
+    ops = ["<-", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", ",", "and", "or", "not", "xor", "in"]
 
-    tokens_spec = [ # spent almost an hour debugging something before realising the order of these mattered
-        ("OP", operator),
-        ("KW", keyword),
+    # spent almost an hour debugging something before realising the order of these mattered
+    tokens_spec = [
         ("NUM", r"\d+\.?\d*"), # number: int/float
         ("STR", r"(\".*\")|('.*')"), # string (any sequence of characters enclosed in quotes)
-        ("ID", r"\b[a-zA-Z_]+\d*[a-zA-Z_]*"), # ids
-        ("SPACE", r"\s"),
+        ("ID", r"\b[a-zA-Z_]+\d*[a-zA-Z_]*"),
+        ("KW", r"|".join(kws)), # kw regex
+        ("OP", r"|".join(ops)), # op regex
         ("NEWL", r"\n"), # for line counting / statement termination
-        ("BAD", r".")
+        ("SPACE", r"\s"),
+        ("BAD", r".") # yuh
     ]
     
     # YOO WELCOME TO THE BLACK PARADE BY GLASS BEACH IS PLAYING
@@ -40,7 +35,7 @@ def lexer(src):
     token_regex = '|'.join('(?P<%s>%s)' % pair for pair in tokens_spec) # creates master regex with groups that have ids of the specific language features they match
 
     line = 1 # track lines for error msg
-    line_start = 0 # track col
+    line_start = 0 # track col for error msg
     for item in re.finditer(token_regex, src):
         # type and value of match
         t_type = item.lastgroup
@@ -49,6 +44,11 @@ def lexer(src):
         col = item.start() - line_start
         
         match [t_type, t_value]:
+            case ["ID", val]:
+                if val in kws: # just in case (its probably inefficient but idc)
+                    t_type = "KW"
+                elif val in ops:
+                    t_type = "OP"
             case ["NUMBER", _]:
                 t_value = float(t_value) if '.' in t_value else int(t_value) # get value of number
             case ["SPACE", _]:
@@ -58,7 +58,7 @@ def lexer(src):
                 line_start = item.end()
                 t_value = "" # we dont need that
             case ["BAD", _]:
-                raise SyntaxError(f"bad character {t_value} at line {line} col {col+1}")
+                raise SyntaxError(f"bad character {t_value} at line {line} col {col+1}") # informative yes
 
         print("DEBUG:", t_type, t_value)
         tokens.append((t_type, t_value))
