@@ -1,5 +1,3 @@
-from ast import operator
-import string
 import re
 
 # lexer is such a cool word honestly
