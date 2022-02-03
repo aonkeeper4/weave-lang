@@ -14,7 +14,7 @@ def lexer(src):
     tokens = []
 
     kws = ["if", "for", "do", "end", "return", "int", "float", "str", "bool", "function", "of", "arr", "none"]
-    ops = ["<-", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", ",", "and", "or", "not", "xor", "in"]
+    ops = ["<-", "->", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", ",", "and", "or", "not", "xor", "in"]
 
     # spent almost an hour debugging something before realising the order of these mattered
     tokens_spec = [

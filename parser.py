@@ -4,6 +4,11 @@ class SyntaxNode:
         self.val = val
         self.subnodes = subnodes
 
-def parser():
+def parser(tokens):
+    tokens = map(lambda token: SyntaxNode(token[0], token[1], []), tokens)
+    # build tree top-down?
+    # ok but how
     
+    pass # ill figure it out later
+
     return ast
