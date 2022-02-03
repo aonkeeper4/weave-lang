@@ -15,10 +15,8 @@ def lexer(src):
     tokens = []
 
     # regexes for language components
-    identifier = r"\b[a-zA-Z_]+\d*[a-zA-Z_]*" # ids
-    number = r"\d+\.?\d*" # number: int/float
     word_ops = ["and", "or", "not", "xor", "in"] # operators that are words are handled differently
-    ops = ["<-", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", "\"", "'", ","] # other operators
+    ops = ["<-", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", ","] # other operators
 
     word_ops = [rf"\b{op}\b" for op in word_ops] # processing for word operators
     operator = r"|".join(word_ops + ops) # combined regex for operators
@@ -27,11 +25,12 @@ def lexer(src):
     keyword = r"|".join(kws) # combined regex for keywords
 
     tokens_spec = [ # spent almost an hour debugging something before realising the order of these mattered
+        ("STR", r"(\".*\")|('.*')"), # string (any sequence of characters enclosed in quotes)
         ("OP", operator),
         ("KW", keyword),
-        ("NUM", number),
-        ("ID", identifier),
-        ("NEWL", r"\n"), # for line counting or at least i dont think the parser needs it
+        ("NUM", r"\d+\.?\d*"), # number: int/float
+        ("ID", r"\b[a-zA-Z_]+\d*[a-zA-Z_]*"), # ids
+        ("NEWL", r"\n"), # for line counting / statement termination
         ("SPACE", r"\s"),
         ("BAD", r".")
     ]
@@ -41,21 +40,25 @@ def lexer(src):
     token_regex = '|'.join('(?P<%s>%s)' % pair for pair in tokens_spec) # creates master regex with groups that have ids of the specific language features they match
 
     line = 1 # track lines for error msg
+    line_start = 0 # track col
     for item in re.finditer(token_regex, src):
         # type and value of match
         t_type = item.lastgroup
         t_value = item.group()
+
+        col = item.start() - line_start
         
-        match t_type:
-            case "NUMBER":
+        match [t_type, t_value]:
+            case ["NUMBER", _]:
                 t_value = float(t_value) if '.' in t_value else int(t_value) # get value of number
-            case "SPACE":
+            case ["SPACE", _]:
                 continue
-            case "NEWL":
+            case ["NEWL", _]:
                 line += 1
+                line_start = item.end()
                 t_value = "" # we dont need that
-            case "BAD":
-                raise RuntimeError(f"bad character {t_value} at line {line}") # implement column tracking?
+            case ["BAD", _]:
+                raise SyntaxError(f"bad character {t_value} at line {line} col {col+1}")
 
         print("DEBUG:", t_type, t_value)
         tokens.append((t_type, t_value))

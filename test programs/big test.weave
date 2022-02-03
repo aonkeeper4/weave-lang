@@ -1,5 +1,6 @@
 ;; This is a comment
 ;; i need to make a vscode syntax highlighter for this it looks so ugly rn
+;; aha text 
 
 fizzbuzz: function(n: int) -> none do
     for (i: int <- 1 | i <= n | i <- i + 1) do
@@ -29,7 +30,7 @@ fibo: function(n: int) -> int do
     return a
 end
 
-program do
+program dos
     fizzbuzz(100)
 
     result: int <- fibo(7)
@@ -40,4 +41,6 @@ program do
     for (item: int in myarr) do
         print(item)
     end
+
+    print("done!")
 end
