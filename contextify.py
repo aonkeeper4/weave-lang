@@ -9,4 +9,4 @@ class ActionNode(SyntaxNode):
 
 def contextify(ast):
     pass
-    return action_tree
+    return action_tree # is ast with context
