@@ -20,7 +20,7 @@ def lexer(src):
     tokens_spec = [
         ("NUM", r"\d+\.?\d*"), # number: int/float
         ("STR", r"(\".*\")|('.*')"), # string (any sequence of characters enclosed in quotes)
-        ("ID", r"\b[a-zA-Z_]+\d*[a-zA-Z_]*"),
+        ("ID", r"\b[a-zA-Z_]+\d*[a-zA-Z_]*"), # match ids before ops
         ("KW", r"|".join(kws)), # kw regex
         ("OP", r"|".join(ops)), # op regex
         ("NEWL", r"\n"), # for line counting / statement termination
