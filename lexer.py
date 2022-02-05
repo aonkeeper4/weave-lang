@@ -65,4 +65,4 @@ def lexer(src):
 
 if __name__ == "__main__":
     with open("test programs/big test.weave", "r") as f: # just for test
-        lexer(f.read())
+        tokens = lexer(f.read())
