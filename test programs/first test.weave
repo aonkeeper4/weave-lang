@@ -1,0 +1,4 @@
+program do
+  a: int = 3
+  print(a + 3)
+end
