@@ -3,14 +3,7 @@ from lexer import lexer
 # bottom up parser
 
 def parser(tokens):
-
-    while True:
-        token_cache = []
-        match = False
-        while not match:
-            current = next(token_gen)
-            token_cache.append(current)
-            match = match_grammar(token_cache)
+    pass
 
 
 if __name__ == "__main__":
