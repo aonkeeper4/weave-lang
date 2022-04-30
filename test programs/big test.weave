@@ -28,6 +28,14 @@ fibo: function(n: int) -> int do
     return a
 end
 
+factorial: function(n: int) -> int do
+    if (n = 0) do
+        return 1
+    end
+
+    return n * factorial(n-1)
+end
+
 program do
     fizzbuzz(100)
 
@@ -36,7 +44,7 @@ program do
 
     myarr: arr of float <- [1.0, 2.2, 3.7, 4.9, 5.4]
 
-    for (item: int in myarr) do
+    for (item: int of myarr) do
         print(item)
     end
 

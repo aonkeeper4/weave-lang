@@ -1,4 +1,5 @@
 import re
+from utils import Token
 
 # lexer is such a cool word honestly
 def lexer(src):
@@ -13,7 +14,7 @@ def lexer(src):
 
     tokens = []
 
-    kws = ["if", "for", "do", "end", "return", "int", "float", "str", "bool", "function", "of", "arr", "none"]
+    kws = ["if", "for", "do", "end", "return", "int", "float", "str", "bool", "function", "of", "arr", "none", "program"]
     ops = ["<-", "->", ">=", "<=", ":", "\|", "\(", "\)", "\[", "\]", "<", ">", "=", "\+", "-", "\*", "/", "%", "!", ",", "and", "or", "not", "xor", "in"]
 
     # spent almost an hour debugging something before realising the order of these mattered
@@ -59,7 +60,7 @@ def lexer(src):
                 raise SyntaxError(f"bad character {t_value} at line {line} col {col+1}") # informative yes
 
         print("DEBUG:", t_type, t_value)
-        tokens.append((t_type, t_value))
+        tokens.append(Token(t_type, t_value))
 
     return tokens
 

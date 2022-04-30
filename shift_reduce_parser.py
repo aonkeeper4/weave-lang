@@ -1,13 +1,13 @@
 # TODO: fix
-import re
+
+from utils import Token
 
 class AST:
     pass
 
 grammar = {
-    r"\d": "E",
-    r"E[+*-/]E": "E",
-    r"^E$": "$"
+    ("NUM", "OP", "NUM"): Token("EXPR"),
+    ("EXPR", "OP", "EXPR"): Token("END"),
 }
 
 class ShiftReduceParser:
@@ -19,13 +19,30 @@ class ShiftReduceParser:
         """
         Performs the shift-reduce parsing algorithm.
         """
-        # may need to not cheat in order to get ast to generate properly
-        new_data = data
-        while new_data != "$":
-            for k, v in self.grammar.items():
-                new_data = re.sub(k, v, new_data)
+        stack = []
+        input_buffer = data
 
-        return self.tree
+        def find_sub_list(sl,l):
+            sll=len(sl)
+            for ind in (i for i,e in enumerate(l) if e==sl[0]):
+                if l[ind:ind+sll]==sl:
+                    return ind,ind+sll
+            return None
+
+        while input_buffer:
+            stack += [input_buffer[0]]
+            input_buffer = input_buffer[1:]
+            for key, value in grammar.items():
+                indices = find_sub_list(key, [tok.type for tok in stack])
+                if indices is not None:
+                    stack[indices[0]:indices[1]] = value
+                    print("Stack:", stack)
+                    print("Input buffer:", input_buffer)
+
+            
+        return stack
 
 parser = ShiftReduceParser(grammar)
-print(parser.parse("3+2+5"))
+print(parser.parse(
+    [Token("NUM", 3), Token("OP", "+"), Token("NUM", 3), Token("OP", "+"), Token("NUM", 3)]
+))
