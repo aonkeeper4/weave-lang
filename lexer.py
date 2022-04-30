@@ -66,3 +66,6 @@ def lexer(src):
 if __name__ == "__main__":
     with open("test programs/big test.weave", "r") as f: # just for test
         tokens = lexer(f.read())
+
+    with open("tokens.txt", "w") as f:
+        f.write("\n".join("{} {}".format(*token) for token in tokens))
