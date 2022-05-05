@@ -3,6 +3,7 @@ import sys, os
 
 # do i put type hints on everything ;o.o
 
+
 def compile_weave(src_file, out_file):
     if not out_file.endswith(".c"):
         raise ValueError("output must be C source file")
@@ -23,6 +24,7 @@ def compile_weave(src_file, out_file):
     # compile and run outputted c with gcc
     os.system(f"gcc {out_file} -o {out_name}")
     os.system(f"{out_name}.exe")
+
 
 if __name__ == "__main__":
     compile_weave(sys.argv[1], sys.argv[2])
