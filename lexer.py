@@ -69,4 +69,4 @@ if __name__ == "__main__":
         tokens = lexer(f.read())
 
     with open("tokens.txt", "w") as f:
-        f.write("\n".join("{} {}".format(*token) for token in tokens))
+        f.write("\n".join(str(token) for token in tokens))
